@@ -12,6 +12,16 @@ save the result of generated tree as a txt file.
 #include <stack>
 
 using namespace std;
+//Helper function
+int hprIntCharCount(int n) {
+	int count(0);
+	do {
+		n /= 10;
+		count++;
+	} while (n != 0);
+	return count;
+}
+
 //Debugging purpose method print the collection of sequence
 void print(list<list<int>> nestedList) {
 	for (auto it = nestedList.begin(); it != nestedList.end(); it++) {
@@ -51,7 +61,7 @@ void recursive_treePosition(stack<list<int>> & posCollection) {
 	list<int> lastPositions = posCollection.top();
 	list<int> newPositions;
 	for (auto it = lastPositions.begin(); it != lastPositions.end();) {
-		newPositions.push_back((*it + *next(it)) / 2);
+		newPositions.push_back( (*it + *next(it)) / 2);
 		//jump element twice
 		it++;
 		if (it != lastPositions.end())it++;
@@ -102,7 +112,9 @@ int main() {
 			seed.push_back(position);
 			sequenceCount++;
 			if (sequenceCount % 2 == 0) position+=2;
-			position += 2;
+			//position += hprIntCharCount(*it);
+			cout << hprIntCharCount(*it) << endl;
+			position += 1+ hprIntCharCount(*it);
 		}
 		sequencePositions.push(seed);
 	}
@@ -132,7 +144,7 @@ int main() {
 				if (symbolCounter++ % 2 == 0) 
 					file << "\\";
 				else
-					file << "/";				
+					file << "/";
 				currentCharLocation++;
 			}
 			file << "\n";
@@ -147,7 +159,7 @@ int main() {
 					currentCharLocation++;
 				}
 				file << *element;
-				currentCharLocation++;
+				currentCharLocation+= hprIntCharCount(*element);
 			}
 			file << "\n";
 		}
