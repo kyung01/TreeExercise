@@ -2,8 +2,7 @@
 2018/4/10 
 KyungHwan Chang 
 iopzxz@gmail.com
-This program will take an input defining level of tree sequence, then
-save the result of generated tree as a txt file.
+This program will take an input defining level of tree sequence, then save the result of generated tree as a txt file.
 */
 
 #include <iostream>
@@ -12,7 +11,9 @@ save the result of generated tree as a txt file.
 #include <stack>
 
 using namespace std;
+
 //Helper function
+//Counts how many characters are in the integer 
 int hprIntCharCount(int n) {
 	int count(0);
 	do {
@@ -42,6 +43,7 @@ void print(stack<list<int>> stackList) {
 	}
 }
 
+//recursively create tree
 void recursive_tree(list<list<int>> & collection,int const maxIteraetion, int currentIteration) {
 	if (currentIteration == maxIteraetion) return;
 	list<int> sequence = collection.back();
@@ -57,6 +59,8 @@ void recursive_tree(list<list<int>> & collection,int const maxIteraetion, int cu
 	collection.push_back(nextSequence);
 	recursive_tree(collection, maxIteraetion, ++currentIteration);
 }
+
+//recursively create positon in which tree's elements need to be printed onto the txt file
 void recursive_treePosition(stack<list<int>> & posCollection) {
 	list<int> lastPositions = posCollection.top();
 	list<int> newPositions;
@@ -69,13 +73,16 @@ void recursive_treePosition(stack<list<int>> & posCollection) {
 	posCollection.push(newPositions);
 	if (newPositions.size() >= 2)recursive_treePosition(posCollection);
 }
+
 int main() {
-	bool debug(true);
-	cout << "This program will generate a tree sequence. You will be providing an input that defines the level of depth for the sequence." << std::endl;
+	bool debug(false);
+	cout << "2018/04/11 KyungHwan Chang iopzxz@gmail.com" << endl;
+	cout << "NeuroScouting Fall 2018 Co-op: TreeExercise" << endl;
+	cout << "This program will generate a tree sequence and save the tree as result.txt file. You will be providing an input that defines the level of depth for the sequence." << std::endl;
 	cout << "Provide an integer that defines the depth of sequence: ";
 	int depth;
 	cin >> depth;
-	cout << "sequence: " << depth <<endl; //delete it later perhaps
+
 	list<std::list<int>> sequenceCollection;
 	if(depth == 1){
 		//exceptional case
@@ -112,8 +119,6 @@ int main() {
 			seed.push_back(position);
 			sequenceCount++;
 			if (sequenceCount % 2 == 0) position+=2;
-			//position += hprIntCharCount(*it);
-			cout << hprIntCharCount(*it) << endl;
 			position += 1+ hprIntCharCount(*it);
 		}
 		sequencePositions.push(seed);
@@ -124,8 +129,8 @@ int main() {
 		cout << "debug : Sequence collection position" << endl;
 		print(sequencePositions);
 	}
-	//Tree nad approrpiate position that each element of the tree needs to be printed is generated
-	//now save the result as the text file
+	//Tree and approrpiate positions that each element of the tree needs to be printed are generated
+	//Now save the result as the text file
 	ofstream file;
 	file.open("result.txt");
 	for (auto sequence = sequenceCollection.begin(); sequence != sequenceCollection.end(); sequence++) {
@@ -141,15 +146,12 @@ int main() {
 					file << " ";
 					currentCharLocation++;
 				}
-				if (symbolCounter++ % 2 == 0) 
-					file << "\\";
-				else
-					file << "/";
+				file << ((symbolCounter++ % 2 == 0) ? "\\": "/");
 				currentCharLocation++;
 			}
 			file << "\n";
 		}
-		//print out the elements(numbers) onto the new line
+		//print out the elements(numbers) of the tree onto the file
 		{
 			auto positionIterator = positions.begin();
 			int currentCharLocation = 1;
@@ -165,6 +167,5 @@ int main() {
 		}
 	}
 	file.close();
-	system("pause");
 	return 0;
 }
