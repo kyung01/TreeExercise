@@ -44,6 +44,8 @@ void print(stack<list<int>> stackList) {
 }
 
 //recursively create tree
+//However the function assumes that first and second solutions which are {1} and {1,1} are provided as seed
+//ex) recursive_tree(your_tree_data_collection, desired_recursive_depth, 2); //enter 2 as the current iteration because you have already provided first and second solution 
 void recursive_tree(list<list<int>> & collection,int const maxIteraetion, int currentIteration) {
 	if (currentIteration == maxIteraetion) return;
 	list<int> sequence = collection.back();
@@ -81,7 +83,25 @@ int main() {
 	cout << "This program will generate a tree sequence and save the tree as result.txt file. You will be providing an input that defines the level of depth for the sequence." << std::endl;
 	cout << "Provide an integer that defines the depth of sequence: ";
 	int depth;
-	cin >> depth;
+
+	//from https://stackoverflow.com/questions/18567483/c-checking-for-an-integer
+	//StackOverflow Paul R's solution to "C++ Checking for an integer"
+	while (1) { // <<< loop "forever"
+		cout << "Provide an integer that defines the depth of sequence: ";
+		cin >> depth;
+
+		if (cin.good())
+		{
+			if (depth < 0) { cout << "Input cannot be negative value. Please enter positive integer."<<endl; }
+			else { break; }
+		}                            // ^^^^^ break out of loop only if valid +ve integer
+		else
+		{
+			cout << "Input must be an integer."<<endl;
+			cin.clear();
+			cin.ignore(INT_MAX, '\n'); // NB: preferred method for flushing cin
+		}
+	}
 
 	list<std::list<int>> sequenceCollection;
 	if(depth == 1){
